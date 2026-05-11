@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useMapStore } from '@/stores/mapStore'
@@ -13,6 +13,8 @@ const filterStore = useFilterStore()
 const mapContainer = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 let markersLayer: L.LayerGroup | null = null
+let networkLayer: L.LayerGroup | null = null
+let networkSvgLayer: L.SVG | null = null
 
 // 获取哲学家标记颜色（基于学派）
 const getPhilosopherColor = (philosopher: Philosopher): string => {
@@ -161,6 +163,9 @@ onMounted(() => {
   // 创建标记图层组
   markersLayer = L.layerGroup().addTo(map)
 
+  // 创建网络关系图层组（在标记图层之上）
+  networkLayer = L.layerGroup().addTo(map)
+
   // 监听地图移动事件，同步到store
   map.on('moveend', () => {
     if (map) {
@@ -170,9 +175,78 @@ onMounted(() => {
     }
   })
 
-  // 初始化标记
+  // 初始化标记和网络
   updateMarkers()
+  updateNetworkLayer()
 })
+
+// 更新网络层（显示影响关系连线）
+const updateNetworkLayer = async () => {
+  if (!map || !networkLayer) return
+
+  // 清除现有网络线
+  networkLayer.clearLayers()
+
+  const philosophers = filterStore.filteredPhilosophers
+  const philoIds = new Set(philosophers.map(p => p.id))
+
+  // 为每个哲学家绘制影响关系线
+  philosophers.forEach(sourcePhilosopher => {
+    sourcePhilosopher.influences.forEach(targetId => {
+      // 只绘制双方都在当前筛选中的关系
+      if (!philoIds.has(targetId)) return
+
+      const targetPhilosopher = philosophers.find(p => p.id === targetId)
+      if (!targetPhilosopher) return
+
+      const sourceLatLng = [sourcePhilosopher.birth.location.lat, sourcePhilosopher.birth.location.lng]
+      const targetLatLng = [targetPhilosopher.birth.location.lat, targetPhilosopher.birth.location.lng]
+
+      // 创建带箭头的曲线
+      const latlngs = [sourceLatLng as L.LatLngExpression, targetLatLng as L.LatLngExpression]
+
+      // 绘制连线
+      const polyline = L.polyline(latlngs, {
+        color: '#64ffda',
+        weight: 2,
+        opacity: 0.6,
+        dashArray: '5, 5',
+        className: 'network-line'
+      }).addTo(networkLayer!)
+
+      // 添加箭头标记（在目标点）
+      const arrowIcon = L.divIcon({
+        className: 'network-arrow',
+        html: `
+          <svg width="12" height="12" viewBox="0 0 12 12" style="transform: rotate(${getAngle(sourceLatLng, targetLatLng)}deg)">
+            <polygon points="6,12 0,0 12,0" fill="#64ffda" opacity="0.8"/>
+          </svg>
+        `,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+      })
+
+      // 在目标位置附近放置箭头
+      const arrowLatLng = getArrowPosition(sourceLatLng, targetLatLng, 0.85)
+      L.marker(arrowLatLng as L.LatLngExpression, { icon: arrowIcon, interactive: false }).addTo(networkLayer!)
+    })
+  })
+}
+
+// 计算两点角度（用于箭头旋转）
+const getAngle = (from: number[], to: number[]): number => {
+  const dx = to[1] - from[1]
+  const dy = to[0] - from[0]
+  return Math.atan2(dy, dx) * 180 / Math.PI + 90
+}
+
+// 计算箭头位置（在线段的某个百分比位置）
+const getArrowPosition = (from: number[], to: number[], ratio: number): number[] => {
+  return [
+    from[0] + (to[0] - from[0]) * ratio,
+    from[1] + (to[1] - from[1]) * ratio
+  ]
+}
 
 // 清理
 onUnmounted(() => {
@@ -181,11 +255,14 @@ onUnmounted(() => {
     map = null
   }
   markersLayer = null
+  networkLayer = null
+  networkSvgLayer = null
 })
 
-// 监听筛选后的哲学家变化，更新标记
+// 监听筛选后的哲学家变化，更新标记和网络
 watch(() => filterStore.filteredPhilosophers, () => {
   updateMarkers()
+  updateNetworkLayer()
 }, { deep: true })
 
 // 监听选中哲学家变化，飞行动画
@@ -241,5 +318,16 @@ watch(() => mapStore.hoveredPhilosopher, () => {
 
 :global(.leaflet-container) {
   background: #1a1a1a;
+}
+
+/* 网络连线样式 */
+:global(.network-line) {
+  pointer-events: none;
+}
+
+:global(.network-arrow) {
+  pointer-events: none;
+  background: transparent;
+  border: none;
 }
 </style>

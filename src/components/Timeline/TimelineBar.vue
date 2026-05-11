@@ -35,7 +35,7 @@
     </div>
 
     <div class="timeline-slider-container">
-      <div class="timeline-track">
+      <div class="timeline-track" @click="onTrackClick">
         <div class="timeline-range" :style="rangeStyle"></div>
         <input
           type="range"
@@ -147,6 +147,39 @@ function emitRange() {
     start: startYear.value,
     end: endYear.value
   })
+}
+
+// 点击轨道跳转到指定时间点
+function onTrackClick(event: MouseEvent) {
+  const track = event.currentTarget as HTMLElement
+  const rect = track.getBoundingClientRect()
+  const clickX = event.clientX - rect.left
+  const trackWidth = rect.width
+
+  // 计算点击位置对应的年份
+  const totalRange = MAX_YEAR - MIN_YEAR
+  const clickPercent = clickX / trackWidth
+  const clickedYear = Math.round(MIN_YEAR + totalRange * clickPercent)
+
+  // 保持当前时间窗口大小，移动窗口到点击位置
+  const rangeSize = endYear.value - startYear.value
+  let newStart = clickedYear - rangeSize / 2
+  let newEnd = clickedYear + rangeSize / 2
+
+  // 边界检查
+  if (newStart < MIN_YEAR) {
+    newStart = MIN_YEAR
+    newEnd = MIN_YEAR + rangeSize
+  }
+  if (newEnd > MAX_YEAR) {
+    newEnd = MAX_YEAR
+    newStart = MAX_YEAR - rangeSize
+  }
+
+  startYear.value = Math.round(newStart)
+  endYear.value = Math.round(newEnd)
+
+  emitRange()
 }
 
 function resetRange() {
@@ -331,6 +364,11 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   margin: 20px 0;
+  cursor: pointer;
+}
+
+.timeline-track:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .timeline-range {
