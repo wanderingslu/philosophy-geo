@@ -1,46 +1,390 @@
+<script setup lang="ts">
+import { onMounted, watch } from 'vue'
+import { useMapStore } from '@/stores/mapStore'
+import { useFilterStore } from '@/stores/filterStore'
+import { useTimeStore } from '@/stores/timeStore'
+import { philosophers } from '@/data/philosophers'
+import type { Philosopher, School } from '@/types'
+
+// Components
+import GlobalSearch from '@/components/Search/GlobalSearch.vue'
+import FilterPanel from '@/components/Sidebar/FilterPanel.vue'
+import PhilosopherList from '@/components/Sidebar/PhilosopherList.vue'
+import LeafletMap from '@/components/Map/LeafletMap.vue'
+import PhilosopherDetail from '@/components/Map/PhilosopherDetail.vue'
+import TimelineBar from '@/components/Timeline/TimelineBar.vue'
+
+const mapStore = useMapStore()
+const filterStore = useFilterStore()
+const timeStore = useTimeStore()
+
+// 初始化数据
+onMounted(() => {
+  filterStore.setPhilosophers(philosophers)
+})
+
+// 处理搜索选择哲学家
+const handleSelectPhilosopher = (philosopher: Philosopher) => {
+  mapStore.selectPhilosopher(philosopher)
+  mapStore.flyToLocation(philosopher.birth.location, 8)
+}
+
+// 处理搜索选择学派
+const handleSelectSchool = (school: School) => {
+  // 可以在这里添加学派筛选逻辑
+  filterStore.selectSchools([school.id])
+}
+
+// 处理时间轴范围变化
+const handleTimeRangeChange = (range: { start: number; end: number }) => {
+  timeStore.setTimeRange(range)
+}
+
+// 监听选中哲学家变化，当选择新哲学家时更新详情
+watch(() => mapStore.selectedPhilosopher, (newPhilosopher) => {
+  if (newPhilosopher) {
+    // 哲学家详情会自动显示
+  }
+})
+
+// 关闭详情弹窗
+const handleCloseDetail = () => {
+  mapStore.selectPhilosopher(null)
+}
+</script>
+
 <template>
   <div class="app">
+    <!-- 顶部导航栏 -->
     <header class="header">
-      <h1>Philosophy Geo</h1>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span class="logo-text">Philosophy Geo</span>
+      </div>
+
+      <div class="search-wrapper">
+        <GlobalSearch
+          @select-philosopher="handleSelectPhilosopher"
+          @select-school="handleSelectSchool"
+        />
+      </div>
+
+      <nav class="view-nav">
+        <button class="nav-btn active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          地图
+        </button>
+        <button class="nav-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          网络
+        </button>
+        <button class="nav-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          故事
+        </button>
+      </nav>
     </header>
+
+    <!-- 主内容区 -->
     <main class="main">
-      <p>项目初始化完成</p>
+      <!-- 侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-content">
+          <FilterPanel />
+          <div class="divider"></div>
+          <PhilosopherList />
+        </div>
+      </aside>
+
+      <!-- 地图区域 -->
+      <div class="map-container">
+        <LeafletMap />
+      </div>
     </main>
+
+    <!-- 时间轴 -->
+    <footer class="timeline-wrapper">
+      <TimelineBar @update:range="handleTimeRangeChange" />
+    </footer>
+
+    <!-- 哲学家详情弹窗 -->
+    <PhilosopherDetail
+      :philosopher="mapStore.selectedPhilosopher"
+      @close="handleCloseDetail"
+      @select-philosopher="handleSelectPhilosopher"
+    />
   </div>
 </template>
 
 <style>
+/* CSS Variables */
+:root {
+  --bg-primary: #0a192f;
+  --bg-secondary: #112240;
+  --bg-tertiary: #1d2d50;
+  --text-primary: #e6f1ff;
+  --text-secondary: #8892b0;
+  --text-tertiary: #a8b2d1;
+  --accent-color: #e94560;
+  --accent-secondary: #64ffda;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Global Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #1a1a1a;
-  color: #fff;
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
 }
 
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* App Layout */
 .app {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: var(--bg-primary);
 }
 
+/* Header */
 .header {
-  height: 60px;
-  background: rgba(20, 20, 20, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  height: 64px;
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(17, 34, 64, 0.95) 100%);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  justify-content: space-between;
+  padding: 0 24px;
+  gap: 24px;
+  flex-shrink: 0;
+  backdrop-filter: blur(10px);
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logo svg {
+  width: 32px;
+  height: 32px;
+  color: var(--accent-color);
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.search-wrapper {
+  flex: 1;
+  max-width: 480px;
+  display: flex;
+  justify-content: center;
+}
+
+.view-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.nav-btn.active {
+  background: rgba(233, 69, 96, 0.2);
+  border-color: rgba(233, 69, 96, 0.5);
+  color: var(--accent-color);
+}
+
+.nav-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Main Content */
 .main {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.sidebar-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar .divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0 16px;
+}
+
+/* Map Container */
+.map-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+/* Timeline Wrapper */
+.timeline-wrapper {
+  padding: 16px 24px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .search-wrapper {
+    max-width: none;
+  }
+
+  .nav-btn {
+    padding: 8px 12px;
+  }
+
+  .nav-btn span {
+    display: none;
+  }
+
+  .sidebar {
+    position: absolute;
+    left: 0;
+    top: 64px;
+    bottom: 0;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .timeline-wrapper {
+    padding: 12px 16px;
+  }
+}
+
+/* Selection and Focus Styles */
+::selection {
+  background: rgba(233, 69, 96, 0.3);
+  color: var(--text-primary);
+}
+
+/* Focus Visible */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Button Reset */
+button {
+  font-family: inherit;
+}
+
+/* Transition Defaults */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
