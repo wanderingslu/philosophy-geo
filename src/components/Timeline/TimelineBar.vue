@@ -181,8 +181,7 @@ function startPlay() {
       return
     }
 
-    const rangeSize = endYear.value - startYear.value
-    startYear.value = Math.min(startYear.value + step, MAX_YEAR - rangeSize)
+    // 播放时左端点固定，仅右端点移动
     endYear.value = Math.min(endYear.value + step, MAX_YEAR)
 
     emitRange()

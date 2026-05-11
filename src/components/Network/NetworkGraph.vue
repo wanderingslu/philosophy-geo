@@ -102,28 +102,46 @@ const initNetwork = async () => {
     .force('center', d3.forceCenter(width / 2, height / 2))
     .force('collision', d3.forceCollide().radius((d: any) => d.importance * 3 + 10))
 
-  // 绘制连接线
-  const link = g.append('g')
-    .attr('stroke', '#64ffda')
-    .attr('stroke-opacity', 0.4)
-    .selectAll('line')
-    .data(links.value)
-    .join('line')
-    .attr('stroke-width', 2)
-    .attr('marker-end', 'url(#arrowhead)')
+  // 绘制连接线（带箭头）
+  const linkGroup = g.append('g').attr('class', 'links')
 
-  // 添加箭头标记
-  svg.append('defs').append('marker')
-    .attr('id', 'arrowhead')
-    .attr('viewBox', '0 -5 10 10')
-    .attr('refX', 25)
-    .attr('refY', 0)
-    .attr('markerWidth', 6)
-    .attr('markerHeight', 6)
-    .attr('orient', 'auto')
-    .append('path')
-    .attr('d', 'M0,-5L10,0L0,5')
-    .attr('fill', '#64ffda')
+  // 创建链接数据，包含目标节点的重要性
+  const linkData = links.value.map((l: any) => {
+    const targetNode = nodes.value.find(n => n.id === l.target)
+    return {
+      ...l,
+      targetImportance: targetNode?.importance || 5
+    }
+  })
+
+  const link = linkGroup.selectAll('line')
+    .data(linkData)
+    .join('line')
+    .attr('stroke', '#64ffda')
+    .attr('stroke-opacity', 0.5)
+    .attr('stroke-width', 2)
+    .attr('marker-end', (d: any) => `url(#arrowhead-${d.targetImportance})`)
+
+  // 添加箭头标记定义
+  const defs = svg.append('defs')
+
+  // 为不同重要性的节点创建不同大小的箭头
+  const importanceLevels = [5, 6, 7, 8, 9, 10]
+  importanceLevels.forEach(imp => {
+    const nodeRadius = imp * 3 + 5 // 节点半径 + 偏移
+    defs.append('marker')
+      .attr('id', `arrowhead-${imp}`)
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', nodeRadius)
+      .attr('refY', 0)
+      .attr('markerWidth', 8)
+      .attr('markerHeight', 8)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M0,-5L10,0L0,5')
+      .attr('fill', '#64ffda')
+      .attr('opacity', '0.8')
+  })
 
   // 绘制节点组
   const node = g.append('g')
