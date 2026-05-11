@@ -178,7 +178,29 @@ onMounted(() => {
   // 初始化标记和网络
   updateMarkers()
   updateNetworkLayer()
+
+  // 自适应缩放以适应所有标记
+  setTimeout(() => {
+    fitMapToMarkers()
+  }, 100)
 })
+
+// 自适应缩放以适应所有标记
+const fitMapToMarkers = () => {
+  if (!map || filterStore.filteredPhilosophers.length === 0) return
+
+  const bounds = L.latLngBounds(
+    filterStore.filteredPhilosophers.map(p => [p.birth.location.lat, p.birth.location.lng])
+  )
+
+  map.fitBounds(bounds, {
+    padding: [50, 50],
+    maxZoom: 8,
+    minZoom: 2,
+    animate: true,
+    duration: 1
+  })
+}
 
 // 更新网络层（显示影响关系连线）
 const updateNetworkLayer = async () => {
@@ -259,10 +281,11 @@ onUnmounted(() => {
   networkSvgLayer = null
 })
 
-// 监听筛选后的哲学家变化，更新标记和网络
+// 监听筛选后的哲学家变化，更新标记和网络，并自适应缩放
 watch(() => filterStore.filteredPhilosophers, () => {
   updateMarkers()
   updateNetworkLayer()
+  fitMapToMarkers()
 }, { deep: true })
 
 // 监听选中哲学家变化，飞行动画

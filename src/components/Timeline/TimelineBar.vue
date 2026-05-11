@@ -71,7 +71,7 @@ const MIN_YEAR = -800
 const MAX_YEAR = 2024
 const DEFAULT_START = -800
 const DEFAULT_END = 2024
-const SPEEDS = [1, 2, 5] as const
+const SPEEDS = [1, 2] as const
 
 // Types
 type Speed = typeof SPEEDS[number]
