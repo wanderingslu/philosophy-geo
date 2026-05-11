@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import { useMapStore } from '@/stores/mapStore'
 import { useFilterStore } from '@/stores/filterStore'
 import { useTimeStore } from '@/stores/timeStore'
@@ -13,10 +13,14 @@ import PhilosopherList from '@/components/Sidebar/PhilosopherList.vue'
 import LeafletMap from '@/components/Map/LeafletMap.vue'
 import PhilosopherDetail from '@/components/Map/PhilosopherDetail.vue'
 import TimelineBar from '@/components/Timeline/TimelineBar.vue'
+import NetworkGraph from '@/components/Network/NetworkGraph.vue'
 
 const mapStore = useMapStore()
 const filterStore = useFilterStore()
 const timeStore = useTimeStore()
+
+// 当前视图状态: 'map' | 'network'
+const currentView = ref('map')
 
 // 初始化数据
 onMounted(() => {
@@ -51,6 +55,11 @@ watch(() => mapStore.selectedPhilosopher, (newPhilosopher) => {
 const handleCloseDetail = () => {
   mapStore.selectPhilosopher(null)
 }
+
+// 切换视图
+const switchView = (view: string) => {
+  currentView.value = view
+}
 </script>
 
 <template>
@@ -74,26 +83,27 @@ const handleCloseDetail = () => {
       </div>
 
       <nav class="view-nav">
-        <button class="nav-btn active">
+        <button
+          class="nav-btn"
+          :class="{ active: currentView === 'map' }"
+          @click="switchView('map')"
+        >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
             <circle cx="12" cy="10" r="3"/>
           </svg>
           地图
         </button>
-        <button class="nav-btn">
+        <button
+          class="nav-btn"
+          :class="{ active: currentView === 'network' }"
+          @click="switchView('network')"
+        >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
           网络
-        </button>
-        <button class="nav-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-          </svg>
-          故事
         </button>
       </nav>
     </header>
@@ -109,9 +119,10 @@ const handleCloseDetail = () => {
         </div>
       </aside>
 
-      <!-- 地图区域 -->
+      <!-- 地图/网络视图区域 -->
       <div class="map-container">
-        <LeafletMap />
+        <LeafletMap v-if="currentView === 'map'" />
+        <NetworkGraph v-else-if="currentView === 'network'" />
       </div>
     </main>
 

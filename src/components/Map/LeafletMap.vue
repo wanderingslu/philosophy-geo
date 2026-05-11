@@ -146,12 +146,17 @@ onMounted(() => {
     position: 'bottomright'
   }).addTo(map)
 
-  // 添加 CartoDB Dark Matter 深色底图
+  // 添加简洁的深色底图（使用CartoDB Dark Matter，但限制范围不连续）
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
     subdomains: 'abcd',
-    maxZoom: 19
+    maxZoom: 19,
+    noWrap: true,
+    bounds: [[-90, -180], [90, 180]]
   }).addTo(map)
+
+  // 设置地图最大边界，防止无限滚动
+  map.setMaxBounds([[-90, -180], [90, 180]])
 
   // 创建标记图层组
   markersLayer = L.layerGroup().addTo(map)
