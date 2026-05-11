@@ -148,8 +148,8 @@ onMounted(() => {
     position: 'bottomright'
   }).addTo(map)
 
-  // 添加简洁的深色底图（使用CartoDB Dark Matter，但限制范围不连续）
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  // 添加浅色底图（使用CartoDB Positron for light theme）
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO',
     subdomains: 'abcd',
     maxZoom: 19,
@@ -308,7 +308,7 @@ watch(() => mapStore.hoveredPhilosopher, () => {
 .leaflet-map {
   width: 100%;
   height: 100%;
-  background: #1a1a1a;
+  background: oklch(95% 0.005 var(--brand-hue));
 }
 
 :global(.philosopher-marker) {
@@ -329,18 +329,19 @@ watch(() => mapStore.hoveredPhilosopher, () => {
 }
 
 :global(.leaflet-popup-content-wrapper) {
-  background: rgba(30, 30, 30, 0.95);
-  color: white;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 16px var(--shadow-elevated);
 }
 
 :global(.leaflet-popup-tip) {
-  background: rgba(30, 30, 30, 0.95);
+  background: var(--bg-secondary);
 }
 
 :global(.leaflet-container) {
-  background: #1a1a1a;
+  background: oklch(95% 0.005 var(--brand-hue));
 }
 
 /* 网络连线样式 */

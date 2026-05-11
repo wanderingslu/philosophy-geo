@@ -218,11 +218,11 @@ onUnmounted(() => {
 
 <style scoped>
 .timeline-bar {
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  background: var(--bg-secondary);
   border-radius: 12px;
   padding: 16px 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 12px var(--shadow-color);
+  border: 1px solid var(--border-color);
 }
 
 .timeline-header {
@@ -238,18 +238,18 @@ onUnmounted(() => {
   gap: 8px;
   font-size: 18px;
   font-weight: 600;
-  color: #e94560;
+  color: var(--accent-color);
 }
 
 .time-label {
-  background: rgba(233, 69, 96, 0.15);
+  background: oklch(95% 0.05 var(--brand-hue));
   padding: 6px 12px;
   border-radius: 6px;
-  border: 1px solid rgba(233, 69, 96, 0.3);
+  border: 1px solid oklch(85% 0.08 var(--brand-hue));
 }
 
 .time-separator {
-  color: #8892b0;
+  color: var(--text-secondary);
   font-weight: 400;
 }
 
@@ -266,37 +266,41 @@ onUnmounted(() => {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ccd6f6;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .control-btn:hover {
-  background: rgba(233, 69, 96, 0.3);
-  color: #e94560;
+  background: oklch(95% 0.03 var(--brand-hue));
+  color: var(--accent-color);
+  border-color: oklch(80% 0.06 var(--brand-hue));
   transform: scale(1.05);
 }
 
 .play-btn {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #e94560 0%, #c73e54 100%);
+  background: var(--accent-color);
+  border-color: var(--accent-color);
   color: white;
 }
 
 .play-btn:hover {
-  background: linear-gradient(135deg, #f05670 0%, #d84e64 100%);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
   color: white;
 }
 
 .speed-controls {
   display: flex;
   gap: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-primary);
   padding: 4px;
   border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
 
 .speed-btn {
@@ -304,7 +308,7 @@ onUnmounted(() => {
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #8892b0;
+  color: var(--text-secondary);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -312,12 +316,12 @@ onUnmounted(() => {
 }
 
 .speed-btn:hover {
-  color: #ccd6f6;
+  color: var(--text-primary);
 }
 
 .speed-btn.active {
-  background: rgba(233, 69, 96, 0.3);
-  color: #e94560;
+  background: oklch(92% 0.05 var(--brand-hue));
+  color: var(--accent-color);
 }
 
 .timeline-slider-container {
@@ -327,7 +331,7 @@ onUnmounted(() => {
 .timeline-track {
   position: relative;
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: oklch(90% 0.01 var(--brand-hue));
   border-radius: 4px;
   margin: 20px 0;
 }
@@ -335,7 +339,7 @@ onUnmounted(() => {
 .timeline-range {
   position: absolute;
   height: 100%;
-  background: linear-gradient(90deg, #e94560 0%, #f3949f 100%);
+  background: linear-gradient(90deg, var(--accent-color) 0%, oklch(65% 0.12 var(--brand-hue)) 100%);
   border-radius: 4px;
   pointer-events: none;
 }
@@ -359,11 +363,11 @@ onUnmounted(() => {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #e94560;
-  border: 3px solid #1a1a2e;
+  background: var(--accent-color);
+  border: 3px solid var(--bg-secondary);
   cursor: grab;
   pointer-events: auto;
-  box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 2px 8px var(--shadow-color);
   transition: transform 0.2s ease;
 }
 
@@ -379,11 +383,11 @@ onUnmounted(() => {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #e94560;
-  border: 3px solid #1a1a2e;
+  background: var(--accent-color);
+  border: 3px solid var(--bg-secondary);
   cursor: grab;
   pointer-events: auto;
-  box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 2px 8px var(--shadow-color);
 }
 
 .slider-start {
@@ -399,7 +403,7 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 0 4px;
   font-size: 12px;
-  color: #8892b0;
+  color: var(--text-secondary);
 }
 
 .label {

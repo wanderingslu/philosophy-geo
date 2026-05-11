@@ -114,7 +114,7 @@ const resetFilters = () => {
 .section-title {
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -133,28 +133,28 @@ const resetFilters = () => {
 
 .era-button {
   padding: 8px 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  background: #fff;
-  color: #555;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .era-button:hover {
-  background: #f5f5f5;
-  border-color: #ccc;
+  background: oklch(95% 0.01 var(--brand-hue));
+  border-color: oklch(75% 0.02 var(--brand-hue));
 }
 
 .era-button:active {
-  background: #e8e8e8;
+  background: var(--bg-tertiary);
 }
 
 /* 分隔线 */
 .divider {
   height: 1px;
-  background: #e0e0e0;
+  background: var(--border-color);
   margin: 16px 0;
 }
 
@@ -174,16 +174,16 @@ const resetFilters = () => {
   padding: 4px 10px;
   border: none;
   border-radius: 4px;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .reset-button:hover {
-  background: #e0e0e0;
-  color: #333;
+  background: oklch(90% 0.02 var(--brand-hue));
+  color: var(--text-primary);
 }
 
 .schools-list {
@@ -204,11 +204,11 @@ const resetFilters = () => {
 }
 
 .school-item:hover {
-  background: #f8f8f8;
+  background: var(--bg-primary);
 }
 
 .school-item.is-selected {
-  background: #f0f7ff;
+  background: oklch(95% 0.05 var(--brand-hue));
 }
 
 .school-item input[type="checkbox"] {
@@ -216,7 +216,7 @@ const resetFilters = () => {
   height: 16px;
   margin: 0;
   cursor: pointer;
-  accent-color: #4A90E2;
+  accent-color: var(--accent-color);
 }
 
 .color-dot {
@@ -229,19 +229,19 @@ const resetFilters = () => {
 .school-name {
   flex: 1;
   font-size: 13px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .school-count {
   font-size: 12px;
-  color: #999;
+  color: var(--text-tertiary);
 }
 
 /* 空状态 */
 .empty-state {
   padding: 24px;
   text-align: center;
-  color: #999;
+  color: var(--text-tertiary);
   font-size: 13px;
 }
 </style>

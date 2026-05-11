@@ -201,7 +201,7 @@ const handleBackdropClick = (e: MouseEvent) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: oklch(30% 0.02 var(--brand-hue) / 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,15 +212,15 @@ const handleBackdropClick = (e: MouseEvent) => {
 
 .modal-container {
   position: relative;
-  background: linear-gradient(180deg, #1e1e2e 0%, #252535 100%);
+  background: var(--bg-secondary);
   border-radius: 16px;
   width: 100%;
   max-width: 480px;
   max-height: 85vh;
   overflow-y: auto;
   padding: 28px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px var(--shadow-elevated);
+  border: 1px solid var(--border-color);
 }
 
 /* 关闭按钮 */
@@ -232,8 +232,8 @@ const handleBackdropClick = (e: MouseEvent) => {
   height: 32px;
   border: none;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #8892b0;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -242,8 +242,8 @@ const handleBackdropClick = (e: MouseEvent) => {
 }
 
 .close-btn:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: #e94560;
+  background: oklch(95% 0.05 var(--brand-hue));
+  color: var(--accent-color);
 }
 
 .close-btn svg {
@@ -260,7 +260,7 @@ const handleBackdropClick = (e: MouseEvent) => {
 .philosopher-name {
   font-size: 24px;
   font-weight: 700;
-  color: #e6f1ff;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
   line-height: 1.3;
 }
@@ -273,13 +273,13 @@ const handleBackdropClick = (e: MouseEvent) => {
 
 .name-en {
   font-size: 14px;
-  color: #8892b0;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .name-original {
   font-size: 13px;
-  color: #64ffda;
+  color: var(--accent-secondary);
   font-style: italic;
 }
 
@@ -290,8 +290,9 @@ const handleBackdropClick = (e: MouseEvent) => {
   gap: 16px;
   margin-bottom: 24px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-primary);
   border-radius: 12px;
+  border: 1px solid var(--border-color);
 }
 
 .info-item {
@@ -299,24 +300,24 @@ const handleBackdropClick = (e: MouseEvent) => {
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #a8b2d1;
+  color: var(--text-secondary);
 }
 
 .info-item svg {
   width: 16px;
   height: 16px;
-  color: #64ffda;
+  color: var(--accent-secondary);
 }
 
 .info-item.importance svg {
-  color: #ffd700;
+  color: oklch(70% 0.15 80);
 }
 
 /* 章节标题 */
 .section-title {
   font-size: 12px;
   font-weight: 600;
-  color: #8892b0;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin: 0 0 12px 0;
@@ -349,7 +350,7 @@ const handleBackdropClick = (e: MouseEvent) => {
 .description-text {
   font-size: 14px;
   line-height: 1.7;
-  color: #a8b2d1;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -366,8 +367,8 @@ const handleBackdropClick = (e: MouseEvent) => {
 
 .idea-tag {
   padding: 6px 12px;
-  background: rgba(100, 255, 218, 0.1);
-  color: #64ffda;
+  background: oklch(95% 0.05 180);
+  color: oklch(50% 0.12 180);
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
@@ -382,7 +383,7 @@ const handleBackdropClick = (e: MouseEvent) => {
 
 .influence-group {
   padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
 }
 
 .influence-list {
@@ -393,9 +394,9 @@ const handleBackdropClick = (e: MouseEvent) => {
 
 .influence-item {
   padding: 8px 14px;
-  background: rgba(233, 69, 96, 0.1);
-  color: #e94560;
-  border: 1px solid rgba(233, 69, 96, 0.3);
+  background: oklch(95% 0.05 var(--brand-hue));
+  color: var(--accent-color);
+  border: 1px solid oklch(85% 0.08 var(--brand-hue));
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
@@ -404,7 +405,7 @@ const handleBackdropClick = (e: MouseEvent) => {
 }
 
 .influence-item:hover {
-  background: rgba(233, 69, 96, 0.2);
+  background: oklch(92% 0.08 var(--brand-hue));
   transform: translateY(-2px);
 }
 
@@ -418,12 +419,12 @@ const handleBackdropClick = (e: MouseEvent) => {
 }
 
 .modal-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: oklch(70% 0.02 var(--brand-hue));
   border-radius: 3px;
 }
 
 .modal-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: oklch(60% 0.03 var(--brand-hue));
 }
 
 /* 过渡动画 */

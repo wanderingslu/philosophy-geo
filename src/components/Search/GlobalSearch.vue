@@ -324,29 +324,29 @@ import { watch } from 'vue'
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: var(--bg-secondary, #f5f5f5);
-  border: 2px solid transparent;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
   border-radius: 12px;
   transition: all 0.2s ease;
 }
 
 .search-input-wrapper.is-focused,
 .search-input-wrapper.is-open {
-  background: var(--bg-primary, #ffffff);
-  border-color: var(--accent-color, #3b82f6);
-  box-shadow: 0 0 0 3px var(--accent-color-alpha, rgba(59, 130, 246, 0.1));
+  background: var(--bg-secondary);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px oklch(70% 0.08 var(--brand-hue) / 0.25);
 }
 
 .search-icon {
   width: 18px;
   height: 18px;
-  color: var(--text-tertiary, #9ca3af);
+  color: var(--text-tertiary);
   flex-shrink: 0;
 }
 
 .search-input-wrapper.is-focused .search-icon,
 .search-input-wrapper.is-open .search-icon {
-  color: var(--accent-color, #3b82f6);
+  color: var(--accent-color);
 }
 
 .search-input {
@@ -354,12 +354,12 @@ import { watch } from 'vue'
   border: none;
   background: transparent;
   font-size: 14px;
-  color: var(--text-primary, #1f2937);
+  color: var(--text-primary);
   outline: none;
 }
 
 .search-input::placeholder {
-  color: var(--text-tertiary, #9ca3af);
+  color: var(--text-tertiary);
 }
 
 .shortcut-hint {
@@ -367,11 +367,11 @@ import { watch } from 'vue'
   align-items: center;
   gap: 2px;
   padding: 2px 6px;
-  background: var(--bg-tertiary, #e5e7eb);
+  background: var(--bg-tertiary);
   border-radius: 4px;
   font-size: 11px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  color: var(--text-secondary, #6b7280);
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 
@@ -381,10 +381,10 @@ import { watch } from 'vue'
   top: calc(100% + 8px);
   left: 0;
   right: 0;
-  background: var(--bg-primary, #ffffff);
-  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 40px var(--shadow-elevated);
   max-height: 480px;
   overflow-y: auto;
   z-index: 1000;
@@ -407,7 +407,7 @@ import { watch } from 'vue'
 }
 
 .search-section:not(:last-child) {
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .section-header {
@@ -419,7 +419,7 @@ import { watch } from 'vue'
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-secondary, #6b7280);
+  color: var(--text-secondary);
 }
 
 .section-icon {
@@ -430,7 +430,7 @@ import { watch } from 'vue'
 .section-count {
   margin-left: auto;
   padding: 2px 6px;
-  background: var(--bg-secondary, #f5f5f5);
+  background: var(--bg-tertiary);
   border-radius: 10px;
   font-size: 10px;
   font-weight: 500;
@@ -451,7 +451,7 @@ import { watch } from 'vue'
 
 .search-result-item:hover,
 .search-result-item.is-highlighted {
-  background-color: var(--bg-secondary, #f5f5f5);
+  background-color: var(--bg-primary);
 }
 
 .result-content {
@@ -470,17 +470,17 @@ import { watch } from 'vue'
 .name-zh {
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-primary, #1f2937);
+  color: var(--text-primary);
 }
 
 .name-en {
   font-size: 12px;
-  color: var(--text-secondary, #6b7280);
+  color: var(--text-secondary);
 }
 
 .name-original {
   font-size: 11px;
-  color: var(--text-tertiary, #9ca3af);
+  color: var(--text-tertiary);
   font-style: italic;
 }
 
@@ -503,7 +503,7 @@ import { watch } from 'vue'
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: var(--text-tertiary, #9ca3af);
+  color: var(--text-tertiary);
 }
 
 .meta-item svg {
@@ -516,8 +516,8 @@ import { watch } from 'vue'
   padding: 12px 16px;
   text-align: center;
   font-size: 12px;
-  color: var(--text-tertiary, #9ca3af);
-  border-top: 1px solid var(--border-color, #e5e7eb);
+  color: var(--text-tertiary);
+  border-top: 1px solid var(--border-color);
 }
 
 /* No Results */
@@ -527,7 +527,7 @@ import { watch } from 'vue'
   align-items: center;
   gap: 12px;
   padding: 32px 16px;
-  color: var(--text-tertiary, #9ca3af);
+  color: var(--text-tertiary);
 }
 
 .no-results svg {
@@ -538,60 +538,6 @@ import { watch } from 'vue'
 .no-results p {
   margin: 0;
   font-size: 13px;
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .search-input-wrapper {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .search-input-wrapper.is-focused,
-  .search-input-wrapper.is-open {
-    background: var(--bg-primary, #1f2937);
-    border-color: var(--accent-color, #60a5fa);
-    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
-  }
-
-  .search-input {
-    color: var(--text-primary, #f9fafb);
-  }
-
-  .shortcut-hint {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-secondary, #9ca3af);
-  }
-
-  .search-dropdown {
-    background: var(--bg-primary, #1f2937);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  }
-
-  .search-section:not(:last-child) {
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .section-count {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .search-result-item:hover,
-  .search-result-item.is-highlighted {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .name-zh {
-    color: var(--text-primary, #f9fafb);
-  }
-
-  .name-en {
-    color: var(--text-secondary, #9ca3af);
-  }
-
-  .more-results {
-    border-color: rgba(255, 255, 255, 0.1);
-  }
 }
 
 /* Responsive */

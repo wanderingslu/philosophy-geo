@@ -171,8 +171,8 @@ const isHovered = (philosopher: Philosopher): boolean => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  background: #fafafa;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
 }
 
 .stats {
@@ -184,24 +184,24 @@ const isHovered = (philosopher: Philosopher): boolean => {
 .stats-count {
   font-size: 18px;
   font-weight: 700;
-  color: #333;
+  color: var(--accent-color);
 }
 
 .stats-label {
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .stats-total {
   font-size: 12px;
-  color: #999;
+  color: var(--text-tertiary);
 }
 
 .stats-hint {
   font-size: 11px;
-  color: #999;
+  color: var(--text-tertiary);
   padding: 2px 8px;
-  background: #e8e8e8;
+  background: var(--bg-tertiary);
   border-radius: 10px;
 }
 
@@ -225,16 +225,16 @@ const isHovered = (philosopher: Philosopher): boolean => {
 }
 
 .philosopher-item:hover {
-  background: #f5f5f5;
+  background: var(--bg-primary);
 }
 
 .philosopher-item.is-hovered {
-  background: #e8f4fd;
+  background: oklch(95% 0.03 var(--brand-hue));
 }
 
 .philosopher-item.is-selected {
-  background: #d0e8f9;
-  box-shadow: 0 0 0 2px #4A90E2;
+  background: oklch(92% 0.05 var(--brand-hue));
+  box-shadow: 0 0 0 2px var(--accent-color);
 }
 
 /* 学派指示器 */
@@ -254,7 +254,7 @@ const isHovered = (philosopher: Philosopher): boolean => {
 .philosopher-name {
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -264,7 +264,7 @@ const isHovered = (philosopher: Philosopher): boolean => {
 .original-name {
   font-size: 12px;
   font-weight: 400;
-  color: #666;
+  color: var(--text-secondary);
   margin-left: 4px;
 }
 
@@ -272,7 +272,7 @@ const isHovered = (philosopher: Philosopher): boolean => {
   display: flex;
   gap: 12px;
   font-size: 12px;
-  color: #888;
+  color: var(--text-tertiary);
 }
 
 .life-span {
@@ -280,14 +280,14 @@ const isHovered = (philosopher: Philosopher): boolean => {
 }
 
 .importance-score {
-  color: #999;
+  color: var(--text-tertiary);
 }
 
 /* 选中指示器 */
 .selected-indicator {
   width: 20px;
   height: 20px;
-  color: #4A90E2;
+  color: var(--accent-color);
   flex-shrink: 0;
 }
 
@@ -315,13 +315,13 @@ const isHovered = (philosopher: Philosopher): boolean => {
 .empty-title {
   font-size: 14px;
   font-weight: 600;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 4px;
 }
 
 .empty-hint {
   font-size: 12px;
-  color: #999;
+  color: var(--text-tertiary);
 }
 
 /* 滚动条样式 */
@@ -334,11 +334,11 @@ const isHovered = (philosopher: Philosopher): boolean => {
 }
 
 .list-container::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: oklch(70% 0.02 var(--brand-hue));
   border-radius: 3px;
 }
 
 .list-container::-webkit-scrollbar-thumb:hover {
-  background: #aaa;
+  background: oklch(60% 0.03 var(--brand-hue));
 }
 </style>

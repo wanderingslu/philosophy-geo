@@ -390,7 +390,7 @@ onUnmounted(() => {
 .network-graph {
   width: 100%;
   height: 100%;
-  background: var(--bg-primary);
+  background: oklch(95% 0.005 var(--brand-hue));
   position: relative;
   overflow: hidden;
 }
@@ -399,11 +399,11 @@ onUnmounted(() => {
   position: absolute;
   top: 16px;
   left: 16px;
-  background: rgba(17, 34, 64, 0.9);
+  background: var(--bg-secondary);
   padding: 16px 20px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px var(--shadow-color);
   z-index: 10;
   pointer-events: none;
 }
@@ -424,7 +424,6 @@ onUnmounted(() => {
   margin-top: 8px;
   font-size: 11px;
   color: var(--text-tertiary);
-  opacity: 0.7;
 }
 
 :deep(svg) {
@@ -436,18 +435,17 @@ onUnmounted(() => {
   cursor: grabbing;
 }
 
-/* Obsidian风格控制面板 */
+/* Impeccable Light Theme Control Panel */
 .controls-panel {
   position: absolute;
   top: 16px;
   right: 16px;
   width: 260px;
-  background: rgba(17, 34, 64, 0.95);
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  backdrop-filter: blur(10px);
   z-index: 20;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px var(--shadow-elevated);
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -467,7 +465,7 @@ onUnmounted(() => {
 }
 
 .controls-header:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: oklch(95% 0.01 var(--brand-hue));
 }
 
 .controls-title {
@@ -523,7 +521,7 @@ onUnmounted(() => {
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: oklch(90% 0.01 var(--brand-hue));
   border-radius: 2px;
   outline: none;
   cursor: pointer;
@@ -538,6 +536,7 @@ onUnmounted(() => {
   background: var(--accent-color);
   cursor: pointer;
   transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px var(--shadow-color);
 }
 
 .control-slider::-webkit-slider-thumb:hover {
@@ -551,6 +550,7 @@ onUnmounted(() => {
   background: var(--accent-color);
   cursor: pointer;
   border: none;
+  box-shadow: 0 1px 3px var(--shadow-color);
 }
 
 .slider-labels {
@@ -593,7 +593,7 @@ onUnmounted(() => {
   margin-top: 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-primary);
   color: var(--text-secondary);
   font-size: 12px;
   cursor: pointer;
@@ -601,8 +601,8 @@ onUnmounted(() => {
 }
 
 .reset-btn:hover {
-  background: rgba(233, 69, 96, 0.2);
-  border-color: rgba(233, 69, 96, 0.5);
+  background: oklch(95% 0.03 var(--brand-hue));
+  border-color: oklch(80% 0.08 var(--brand-hue));
   color: var(--accent-color);
 }
 </style>

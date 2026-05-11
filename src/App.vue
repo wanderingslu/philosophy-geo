@@ -141,18 +141,33 @@ const switchView = (view: string) => {
 </template>
 
 <style>
-/* CSS Variables */
+/* CSS Variables - Impeccable Light Theme */
 :root {
-  --bg-primary: #0a192f;
-  --bg-secondary: #112240;
-  --bg-tertiary: #1d2d50;
-  --text-primary: #e6f1ff;
-  --text-secondary: #8892b0;
-  --text-tertiary: #a8b2d1;
-  --accent-color: #e94560;
-  --accent-secondary: #64ffda;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --shadow-color: rgba(0, 0, 0, 0.3);
+  /* Brand hue: 260 (blue-purple for wisdom/depth) */
+  --brand-hue: 260;
+  --neutral-chroma: 0.005;
+
+  /* Backgrounds - tinted whites, never pure #fff */
+  --bg-primary: oklch(97% 0.005 var(--brand-hue));
+  --bg-secondary: oklch(100% 0.008 var(--brand-hue));
+  --bg-tertiary: oklch(94% 0.01 var(--brand-hue));
+
+  /* Text - dark on light surfaces */
+  --text-primary: oklch(25% 0.02 var(--brand-hue));
+  --text-secondary: oklch(45% 0.015 var(--brand-hue));
+  --text-tertiary: oklch(55% 0.01 var(--brand-hue));
+
+  /* Accents - vibrant in light mode */
+  --accent-color: oklch(55% 0.18 var(--brand-hue));
+  --accent-secondary: oklch(70% 0.15 180);
+  --accent-hover: oklch(48% 0.2 var(--brand-hue));
+
+  /* Borders - subtle tinted borders */
+  --border-color: oklch(85% 0.01 var(--brand-hue));
+
+  /* Shadows for depth in light mode */
+  --shadow-color: oklch(60% 0.02 var(--brand-hue) / 0.12);
+  --shadow-elevated: oklch(50% 0.02 var(--brand-hue) / 0.15);
 }
 
 /* Global Reset */
@@ -170,29 +185,29 @@ html, body {
   overflow: hidden;
 }
 
-/* Scrollbar Styles */
+/* Scrollbar Styles - Light theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: oklch(70% 0.02 var(--brand-hue));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: oklch(60% 0.03 var(--brand-hue));
 }
 
 /* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  scrollbar-color: oklch(70% 0.02 var(--brand-hue)) var(--bg-secondary);
 }
 
 /* App Layout */
@@ -203,10 +218,10 @@ html, body {
   background: var(--bg-primary);
 }
 
-/* Header */
+/* Header - Light theme with subtle shadow */
 .header {
   height: 64px;
-  background: linear-gradient(180deg, var(--bg-secondary) 0%, rgba(17, 34, 64, 0.95) 100%);
+  background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
@@ -214,7 +229,7 @@ html, body {
   padding: 0 24px;
   gap: 24px;
   flex-shrink: 0;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px var(--shadow-color);
 }
 
 .logo {
@@ -233,10 +248,7 @@ html, body {
 .logo-text {
   font-size: 20px;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-color) 0%, #ff6b6b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-color);
 }
 
 .search-wrapper {
@@ -260,7 +272,7 @@ html, body {
   padding: 8px 16px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-primary);
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
@@ -269,13 +281,14 @@ html, body {
 }
 
 .nav-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: oklch(95% 0.01 var(--brand-hue));
   color: var(--text-primary);
+  border-color: oklch(75% 0.02 var(--brand-hue));
 }
 
 .nav-btn.active {
-  background: rgba(233, 69, 96, 0.2);
-  border-color: rgba(233, 69, 96, 0.5);
+  background: oklch(92% 0.03 var(--brand-hue));
+  border-color: var(--accent-color);
   color: var(--accent-color);
 }
 
@@ -291,13 +304,14 @@ html, body {
   overflow: hidden;
 }
 
-/* Sidebar */
+/* Sidebar - Light theme */
 .sidebar {
   width: 320px;
   flex-shrink: 0;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   overflow: hidden;
+  box-shadow: 2px 0 8px var(--shadow-color);
 }
 
 .sidebar-content {
@@ -313,20 +327,21 @@ html, body {
   margin: 0 16px;
 }
 
-/* Map Container */
+/* Map Container - Light theme */
 .map-container {
   flex: 1;
   position: relative;
   overflow: hidden;
-  background: #1a1a1a;
+  background: oklch(92% 0.005 var(--brand-hue));
 }
 
-/* Timeline Wrapper */
+/* Timeline Wrapper - Light theme */
 .timeline-wrapper {
   padding: 16px 24px;
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
   flex-shrink: 0;
+  box-shadow: 0 -2px 8px var(--shadow-color);
 }
 
 /* Responsive Design */
@@ -377,9 +392,9 @@ html, body {
   }
 }
 
-/* Selection and Focus Styles */
+/* Selection and Focus Styles - Light theme */
 ::selection {
-  background: rgba(233, 69, 96, 0.3);
+  background: oklch(85% 0.08 var(--brand-hue));
   color: var(--text-primary);
 }
 
